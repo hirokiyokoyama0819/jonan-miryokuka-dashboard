@@ -1,0 +1,795 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>高梁城南高校 魅力化推進課 業務ダッシュボード</title>
+<script>document.documentElement.setAttribute('data-theme','light');</script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@500;700;900&family=Noto+Sans+JP:wght@400;500;600;700&display=swap');
+
+:root{
+  --paper:#eaf2f8;
+  --surface:#ffffff;
+  --surface-2:#dfebf3;
+  --ink:#152a3e;
+  --ink-muted:#57728a;
+  --line:#cddce6;
+  --shadow: 0 1px 2px rgba(15,35,55,0.06), 0 6px 20px rgba(15,35,55,0.07);
+
+  --navy:#163a5c;
+  --navy-soft:#d7e4ee;
+  --design:#1f74a8;
+  --design-soft:#d7ebf5;
+  --eco:#4fabdb;
+  --eco-soft:#dff2fa;
+  --alert:#93392f;
+  --alert-soft:#f0dad4;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0e1a27;
+    --surface:#16293b;
+    --surface-2:#1c3247;
+    --ink:#e7eef4;
+    --ink-muted:#93a9bc;
+    --line:#2a4054;
+    --shadow: 0 1px 2px rgba(0,0,0,0.35), 0 8px 26px rgba(0,0,0,0.4);
+
+    --navy:#8ab9dd;
+    --navy-soft:#1f3a52;
+    --design:#6bbde6;
+    --design-soft:#1c3d52;
+    --eco:#8fd4ef;
+    --eco-soft:#17394a;
+    --alert:#dd8f83;
+    --alert-soft:#3a251f;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0e1a27;
+  --surface:#16293b;
+  --surface-2:#1c3247;
+  --ink:#e7eef4;
+  --ink-muted:#93a9bc;
+  --line:#2a4054;
+  --shadow: 0 1px 2px rgba(0,0,0,0.35), 0 8px 26px rgba(0,0,0,0.4);
+
+  --navy:#8ab9dd;
+  --navy-soft:#1f3a52;
+  --design:#6bbde6;
+  --design-soft:#1c3d52;
+  --eco:#8fd4ef;
+  --eco-soft:#17394a;
+  --alert:#dd8f83;
+  --alert-soft:#3a251f;
+}
+
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:"Noto Sans JP","Hiragino Sans",sans-serif;
+  font-feature-settings:"palt";
+  font-size:16.5px;
+  line-height:1.75;
+  padding:36px 18px 90px;
+}
+.wrap{max-width:960px;margin:0 auto;}
+
+.eyebrow{
+  font-size:13px;
+  letter-spacing:.12em;
+  color:var(--ink-muted);
+  font-weight:600;
+  text-transform:uppercase;
+}
+
+header{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  flex-wrap:wrap;
+  gap:16px;
+  margin-bottom:8px;
+  padding-bottom:22px;
+  border-bottom:1px solid var(--line);
+}
+h1{
+  font-family:"Zen Kaku Gothic New",sans-serif;
+  font-weight:900;
+  font-size:clamp(28px,4.4vw,38px);
+  margin:6px 0 6px;
+  text-wrap:balance;
+  letter-spacing:.01em;
+}
+.subtitle{color:var(--ink-muted);font-size:16px;max-width:560px;text-wrap:pretty;}
+.meta{font-size:14px;color:var(--ink-muted);text-align:right;line-height:1.9;}
+.meta b{color:var(--ink);font-weight:600;}
+
+.lede{
+  margin:22px 0 30px;
+  font-size:16.5px;
+  color:var(--ink-muted);
+  max-width:68ch;
+}
+.lede strong{color:var(--ink);font-weight:600;}
+
+/* overview tiles */
+.overview{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  gap:10px;
+  margin-bottom:38px;
+}
+.otile{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:14px 14px 16px;
+  box-shadow:var(--shadow);
+  border-top:3px solid var(--tint,var(--line));
+}
+.otile .oidx{
+  font-family:"Zen Kaku Gothic New",sans-serif;
+  font-weight:700;
+  font-size:12.5px;
+  color:var(--ink-muted);
+  letter-spacing:.06em;
+}
+.otile .oname{
+  font-weight:700;
+  font-size:16px;
+  margin:6px 0 5px;
+  line-height:1.4;
+}
+.otile .odesc{font-size:13.5px;color:var(--ink-muted);line-height:1.6;}
+.otile[data-t="navy"]{--tint:var(--navy);}
+.otile[data-t="design"]{--tint:var(--design);}
+.otile[data-t="eco"]{--tint:var(--eco);}
+
+section{margin-bottom:44px;}
+h2{
+  font-family:"Zen Kaku Gothic New",sans-serif;
+  font-size:22px;
+  font-weight:700;
+  margin:0 0 4px;
+  display:flex;
+  align-items:baseline;
+  gap:10px;
+  flex-wrap:wrap;
+}
+h2 .tag{
+  font-size:13px;
+  font-weight:600;
+  padding:2px 9px;
+  border-radius:999px;
+  background:var(--navy-soft);
+  color:var(--navy);
+  font-family:"Noto Sans JP",sans-serif;
+}
+h2.pri .tag{background:var(--alert-soft);color:var(--alert);}
+.h2-sub{font-size:14.5px;color:var(--ink-muted);margin:0 0 18px;}
+
+/* priority section */
+.pri-block{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:26px 26px 8px;
+  box-shadow:var(--shadow);
+}
+.pri-intro{font-size:16px;color:var(--ink-muted);max-width:70ch;margin-bottom:22px;}
+.pri-intro b{color:var(--ink);font-weight:600;}
+
+.calendar{
+  display:grid;
+  grid-template-columns:repeat(12,1fr);
+  gap:6px;
+  margin-bottom:26px;
+}
+.cal-cell{
+  background:var(--surface-2);
+  border-radius:8px;
+  padding:8px 6px 9px;
+  min-height:100px;
+}
+.cal-cell .m{
+  font-family:"Zen Kaku Gothic New",sans-serif;
+  font-weight:700;
+  font-size:13.5px;
+  color:var(--ink-muted);
+  margin-bottom:5px;
+}
+.cal-cell .ev{font-size:12.5px;color:var(--ink);line-height:1.5;}
+.cal-cell.now{outline:2px solid var(--navy);outline-offset:-2px;}
+.cal-cell.now .m{color:var(--navy);}
+
+.subgroup{margin-bottom:22px;}
+.subgroup:last-child{margin-bottom:6px;}
+.subgroup-h{
+  display:flex;align-items:center;gap:8px;
+  font-weight:700;font-size:16px;margin-bottom:10px;
+}
+.subgroup-h .dot{width:8px;height:8px;border-radius:50%;background:var(--dot,var(--navy));flex-shrink:0;}
+
+.tablewrap{overflow-x:auto;}
+.chk{width:100%;border-collapse:collapse;font-size:15px;min-width:640px;}
+.chk th{
+  text-align:left;
+  font-size:13px;
+  color:var(--ink-muted);
+  font-weight:600;
+  padding:0 10px 8px;
+  border-bottom:1px solid var(--line);
+}
+.chk td{
+  padding:10px 10px;
+  border-bottom:1px solid var(--line);
+  vertical-align:top;
+}
+.chk tr:last-child td{border-bottom:none;}
+.chk td.item{font-weight:500;}
+.chk td.note{color:var(--ink-muted);font-size:13.5px;}
+.chk td.when{color:var(--ink-muted);white-space:nowrap;font-size:13.5px;}
+.chk td.mark{text-align:center;white-space:nowrap;font-weight:700;font-size:15px;}
+.chk td.mark.ok{color:var(--eco);}
+.chk td.mark.ng{color:var(--alert);}
+.chk td.mark.chk-na{color:var(--ink-muted);font-weight:500;}
+.flag{
+  display:inline-block;
+  font-size:12px;
+  padding:2px 7px;
+  border-radius:999px;
+  background:var(--alert-soft);
+  color:var(--alert);
+  font-weight:600;
+  white-space:nowrap;
+}
+
+/* other categories grid */
+.catgrid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:16px;
+}
+.catcard{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-left:3px solid var(--tint,var(--line));
+  border-radius:12px;
+  padding:18px 20px;
+  box-shadow:var(--shadow);
+}
+.catcard[data-t="navy"]{--tint:var(--navy);}
+.catcard[data-t="design"]{--tint:var(--design);}
+.catcard[data-t="eco"]{--tint:var(--eco);}
+.catcard h3{
+  font-family:"Zen Kaku Gothic New",sans-serif;
+  font-size:17px;
+  margin:0 0 10px;
+}
+.catcard ul{margin:0;padding-left:0;list-style:none;display:flex;flex-direction:column;gap:7px;counter-reset:catitem;}
+.catcard li{
+  font-size:15px;
+  padding-left:24px;
+  position:relative;
+  color:var(--ink);
+  counter-increment:catitem;
+}
+.catcard li::before{
+  content:counter(catitem)".";
+  position:absolute;left:0;color:var(--ink-muted);
+  font-weight:700;
+}
+.catcard li .note{display:block;color:var(--ink-muted);font-size:13px;margin-top:1px;}
+
+/* status snapshot */
+.stats2{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+  margin-bottom:22px;
+}
+.stat2{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:14px 16px;
+  box-shadow:var(--shadow);
+}
+.stat2 .num{
+  font-family:"Zen Kaku Gothic New",sans-serif;
+  font-weight:700;
+  font-size:27px;
+  color:var(--navy);
+  font-variant-numeric:tabular-nums;
+  line-height:1;
+}
+.stat2 .label{font-size:13.5px;color:var(--ink-muted);margin-top:7px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.stat2.pending .num{color:var(--ink-muted);}
+.pendingtag{
+  font-size:12px;padding:1px 7px;border-radius:999px;
+  background:var(--alert-soft);color:var(--alert);font-weight:600;
+}
+
+.event-list{
+  display:flex;flex-direction:column;
+  border:1px solid var(--line);border-radius:10px;overflow:hidden;
+  background:var(--surface);box-shadow:var(--shadow);
+  margin-bottom:22px;
+}
+.ev-row{
+  display:grid;grid-template-columns:122px 1fr auto;gap:14px;
+  padding:13px 16px;border-bottom:1px solid var(--line);align-items:center;
+}
+.ev-row:last-child{border-bottom:none;}
+.ev-date{font-size:13px;color:var(--ink-muted);font-weight:600;white-space:nowrap;}
+.ev-content{font-size:15px;}
+.ev-content .sub{display:block;font-size:13.5px;color:var(--ink-muted);margin-top:2px;}
+.ev-status{
+  font-size:13px;padding:3px 10px;border-radius:999px;white-space:nowrap;font-weight:500;
+  background:var(--navy-soft);color:var(--navy);
+}
+.ev-status.prep{background:var(--design-soft);color:var(--design);}
+.ev-status.draft{background:var(--alert-soft);color:var(--alert);}
+.ev-row.no-date{grid-template-columns:1fr auto;}
+
+.pendingcards{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}
+.pendingcard{border:1px dashed var(--line);border-radius:10px;padding:14px 16px;background:var(--surface-2);}
+.pendingcard.filled{border-style:solid;background:var(--surface);box-shadow:var(--shadow);}
+.pc-h{font-weight:700;font-size:14.5px;margin-bottom:6px;display:flex;align-items:center;gap:8px;}
+.pc-body{font-size:13.5px;color:var(--ink-muted);line-height:1.6;}
+.pc-body b{color:var(--ink);font-weight:600;}
+.pc-body .due{color:var(--design);font-weight:500;}
+
+/* callout */
+.callout{
+  background:var(--alert-soft);
+  border-radius:12px;
+  padding:22px 24px;
+  display:grid;
+  gap:12px;
+}
+.callout h2{color:var(--alert);}
+.callout h2 .tag{background:var(--surface);color:var(--alert);}
+.callout ol{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:9px;}
+.callout li{font-size:15px;}
+.callout li b{font-weight:700;}
+.callout li .note{display:block;color:var(--ink-muted);font-size:13.5px;margin-top:2px;}
+
+footer{
+  margin-top:44px;
+  padding-top:18px;
+  border-top:1px solid var(--line);
+  font-size:13.5px;
+  color:var(--ink-muted);
+  max-width:70ch;
+}
+
+@media (max-width:760px){
+  .overview{grid-template-columns:repeat(2,1fr);}
+  .calendar{grid-template-columns:repeat(4,1fr);}
+  .catgrid{grid-template-columns:1fr;}
+  .stats2{grid-template-columns:repeat(2,1fr);}
+  .ev-row{grid-template-columns:1fr;gap:4px;}
+  .pendingcards{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <header>
+    <div>
+      <div class="eyebrow">岡山県立 ｜ 2026年度版</div>
+      <h1>高梁城南高校 魅力化推進課 業務ダッシュボード</h1>
+      <div class="subtitle">課の仕事の全体像を9のカテゴリーで共有し、特に生徒募集・広報の抜け漏れをなくすための整理表です。</div>
+    </div>
+    <div class="meta">作成:横山弘毅<br>2026年9月7日 版<br><b>先生・関係者 共有用たたき台</b></div>
+  </header>
+
+  <div class="overview">
+    <div class="otile" data-t="navy">
+      <div class="oidx">1</div>
+      <div class="oname">生徒募集</div>
+      <div class="odesc">説明会／中学校訪問など</div>
+    </div>
+    <div class="otile" data-t="design">
+      <div class="oidx">2</div>
+      <div class="oname">広報</div>
+      <div class="odesc">学校案内・SNS・メディア対応など発信全般</div>
+    </div>
+    <div class="otile" data-t="eco">
+      <div class="oidx">3</div>
+      <div class="oname">総合的な探究の時間</div>
+      <div class="odesc">「Jona Pro」探究の授業・発表イベントの企画運営</div>
+    </div>
+    <div class="otile" data-t="navy">
+      <div class="oidx">4</div>
+      <div class="oname">地域外部連携・視察対応</div>
+      <div class="odesc">イベント参加／出展／視察対応など</div>
+    </div>
+    <div class="otile" data-t="design">
+      <div class="oidx">5</div>
+      <div class="oname">県外生・寮生サポート</div>
+      <div class="odesc">下宿・寮・生活面のサポート(募集の後工程)</div>
+    </div>
+    <div class="otile" data-t="eco">
+      <div class="oidx">6</div>
+      <div class="oname">JonaLabo</div>
+      <div class="odesc">校内オープンデジタルラボの整備・利活用</div>
+    </div>
+    <div class="otile" data-t="navy">
+      <div class="oidx">7</div>
+      <div class="oname">JONANホールディングス株式会社</div>
+      <div class="odesc">生徒経営会社の運営サポート・業績管理</div>
+    </div>
+    <div class="otile" data-t="design">
+      <div class="oidx">8</div>
+      <div class="oname">新たな魅力づくり</div>
+      <div class="odesc">評価指標開発、新規連携の開拓</div>
+    </div>
+    <div class="otile">
+      <div class="oidx">9</div>
+      <div class="oname">その他</div>
+      <div class="odesc">上記に分類しづらい継続的な行政連携等</div>
+    </div>
+  </div>
+  <p class="h2-sub" style="margin:-4px 0 30px;">※上のタイルはカテゴリー1〜9の一覧です。下の各セクションはタイルの番号順ではなく、優先度に沿った並び順(現在地サマリー→1→4→2→3→5→6→7→8→9)にしています。</p>
+
+  <section>
+    <h2>現在地サマリー <span class="tag">横山が手動更新・スナップショット</span></h2>
+    <p class="h2-sub">視察・出展の実績、未対応案件、HP/SNS更新状況をまとめています。状況が変わったら横山に伝えてください。</p>
+
+    <div class="stats2">
+      <div class="stat2"><div class="num">12件</div><div class="label">視察・出展(9/11〜12/25)</div></div>
+      <div class="stat2"><div class="num">3件</div><div class="label">未対応案件</div></div>
+      <div class="stat2"><div class="num">9/1</div><div class="label">HP最終更新</div></div>
+      <div class="stat2 pending"><div class="num">3件</div><div class="label">SNSアカウント<span class="pendingtag">投稿日未確認</span></div></div>
+    </div>
+
+    <div class="subgroup-h" style="margin-bottom:8px;"><span class="dot" style="--dot:var(--design)"></span>生徒募集イベント(説明会等・10/23〜11/7)</div>
+    <div class="event-list" style="margin-bottom:20px;">
+      <div class="ev-row">
+        <div class="ev-date">10/23(金)</div>
+        <div class="ev-content">ナイトツアー(夜の学校説明会＆校内ツアー)<span class="sub">詳細な時間・対象・申込要否は学校サイトの地区別学校説明会ページに掲載あり(要確認:ナイトツアー固有の時間・定員)</span></div>
+        <div class="ev-status prep">準備中</div>
+      </div>
+      <div class="ev-row">
+        <div class="ev-date">11/7(土)</div>
+        <div class="ev-content">文化祭2日目(一般公開)＝第2回オープンスクール<span class="sub">1の「A. 説明会等」と同じ内容です。文化祭見学と学校説明を兼ねる回のため、通常のオープンスクールと運営体制が異なる可能性あり(要確認)</span></div>
+        <div class="ev-status prep">準備中</div>
+      </div>
+    </div>
+    <p class="h2-sub" style="margin-top:-12px;">出典:<a href="https://www.jonan.okayama-c.ed.jp/wordpress/?page_id=1999&preview_id=1999" style="color:var(--design);">学校サイト 地区別学校説明会ページ</a>(10/23分)。ページ内の日時・対象・申込方法の詳細は自動取得できなかったため、内容の再確認をお願いします。</p>
+
+    <div class="subgroup-h" style="margin-bottom:8px;"><span class="dot" style="--dot:var(--eco)"></span>外部地域連携・出展(9/12〜12/25)</div>
+    <div class="event-list" style="margin-bottom:20px;">
+      <div class="ev-row">
+        <div class="ev-date">9/12(土)</div>
+        <div class="ev-content">高梁商工会議所青年部(YEG) 岡山県青年部大会(県内経営者 約500名)<span class="sub">JONANホールディングスとして販売ブース出展+司会進行</span></div>
+        <div class="ev-status">確定</div>
+      </div>
+      <div class="ev-row">
+        <div class="ev-date">9/15(火)</div>
+        <div class="ev-content">岡山信用金庫フォーラム出展(@岡山市コンベンションセンター)<span class="sub">グッズ販売、県内企業との商談・交流</span></div>
+        <div class="ev-status">確定</div>
+      </div>
+      <div class="ev-row">
+        <div class="ev-date">9/12〜10/24</div>
+        <div class="ev-content">教員6名展「わたしたちのしごと ボクたちのいきかた」(@高梁市成羽美術館)<span class="sub">第24回おかやま県民文化祭共催事業。本校教員6名(安藤昌也・大間光記・河原英利・小林弘幸・平井はな・横山瑞歩)による作品展(絵画・彫刻・現代美術・陶芸・プロダクトデザイン)。チラシ・ポスターも同校教員が制作。初日9/12(土)13:00オープニングイベント+13:30ギャラリートーク+生徒による作品ガイド+教員ワークショップ(③④の時刻は要確認)。関連イベント:アーティストトーク9/19・10/3・10/17、高校生(デザイン科)による作品紹介9/26、ワークショップ10/10。入館無料。会場:高梁市成羽町下原1068-3</span></div>
+        <div class="ev-status prep">準備中</div>
+      </div>
+      <div class="ev-row">
+        <div class="ev-date">10/9(金)</div>
+        <div class="ev-content">教育セミナー in 岡山(ラインズオカヤマ主催) 1日目<span class="sub">電気科3年 北條チームの課題研究・アプリ開発(検定・忘れ物・校内ポータルシステム等)を発表、ブースで活動紹介</span></div>
+        <div class="ev-status prep">準備中</div>
+      </div>
+      <div class="ev-row">
+        <div class="ev-date">10/10(土)</div>
+        <div class="ev-content">教育セミナー in 岡山 2日目<span class="sub">JONANホールディングスの生徒が活動アピール+物販ブース設置。案内表示は「高梁城南高校 / JOHNANホールディングス」の2段表記</span></div>
+        <div class="ev-status prep">準備中</div>
+      </div>
+      <div class="ev-row">
+        <div class="ev-date">12/25(金)</div>
+        <div class="ev-content">おかやま夢育PBLフォーラム(@ホテルグランヴィア岡山)</div>
+        <div class="ev-status prep">準備中</div>
+      </div>
+    </div>
+    <p class="h2-sub" style="margin-top:-12px;">教育セミナー(10/9-10)の会場メモ:発表ブースは特定ゾーン、物販は導線上のホワイエ側に机を増設。活動助成金 約30,000円を支給予定(9/3打合せメモより)。</p>
+
+    <div class="subgroup-h" style="margin-bottom:8px;"><span class="dot" style="--dot:var(--navy)"></span>視察対応(9/11〜10/21)</div>
+    <div class="event-list" style="margin-bottom:20px;">
+      <div class="ev-row">
+        <div class="ev-date">9/11(金)</div>
+        <div class="ev-content">高梁まなびのフィールドツアー(島根大学 社会教育主事講習・地域教育魅力化コーディネーター養成コース 受講者)7名<span class="sub">兵庫・三重・埼玉・徳島・鳥取・京都から参加。たか高(総合探究)→城南(放課後)の流れで案内。高梁駅集合組は2台に分乗予定(9/3時点、1名移動手段未定)</span></div>
+        <div class="ev-status">確定</div>
+      </div>
+      <div class="ev-row">
+        <div class="ev-date">9/13(日)</div>
+        <div class="ev-content">総務大臣 視察(@吹屋)対応<span class="sub">高梁市の重伝建地区・吹屋への視察。横山の具体的な役割・時間帯・当日体制は要確認</span></div>
+        <div class="ev-status">確定</div>
+      </div>
+      <div class="ev-row">
+        <div class="ev-date">9/16(水)</div>
+        <div class="ev-content">和歌山県 紀の川中学校(公立) 視察<span class="sub">午後対応</span></div>
+        <div class="ev-status">確定</div>
+      </div>
+      <div class="ev-row">
+        <div class="ev-date">9/30(水)</div>
+        <div class="ev-content">大阪府立豊岡高校能勢分校(教員1名+生徒10名)<span class="sub">総探の授業見学+JONANホールディングス生徒と交流・午後</span></div>
+        <div class="ev-status">確定</div>
+      </div>
+      <div class="ev-row">
+        <div class="ev-date">10/20〜21</div>
+        <div class="ev-content">埼玉県秩父市・秩父高校・秩父工業高 視察<span class="sub">10/20から来県、10/21「失敗の日」にあわせて来校</span></div>
+        <div class="ev-status prep">準備中</div>
+      </div>
+      <div class="ev-row">
+        <div class="ev-date">10/21(水)</div>
+        <div class="ev-content">失敗の日2026 ＋ 岡山県教育委員会(教委委員)来校<span class="sub">準備の詳細は「失敗の日」案件資料を参照</span></div>
+        <div class="ev-status prep">準備中</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="pri">1 生徒募集 <span class="tag">最重点・抜け漏れ防止の対象</span></h2>
+    <p class="h2-sub">説明会・中学校訪問など、3つの取り組み領域(説明会等／全国募集／生徒数を増やすアイデア)ごとの整理です。</p>
+
+    <div class="pri-block">
+      <p class="pri-intro">全国募集を行う本校では、<b>県内向けの中学校アプローチ</b>と<b>県外・地域みらい留学向けの全国募集対応</b>を並行して回す必要があります。R8年度は全国募集で県外(東京・大阪・滋賀など)から実質5名が入学しており、この流れを維持・拡大できるかが生徒募集の成果を左右します。</p>
+
+      <!-- 年間カレンダー:内容が実態と合っていないため9/7に一旦非表示にしています(削除はしていません)。内容を実態に合わせて精査したら復活してください。
+      <div class="calendar">
+        <div class="cal-cell"><div class="m">4月</div><div class="ev">前年度振り返り・募集方針確認</div></div>
+        <div class="cal-cell"><div class="m">5月</div><div class="ev">中学校訪問リスト更新／パンフ更新着手</div></div>
+        <div class="cal-cell"><div class="m">6月</div><div class="ev">中学校訪問本格化／夏の説明会準備</div></div>
+        <div class="cal-cell"><div class="m">7月</div><div class="ev">オープンスクール(夏)／保護者説明会</div></div>
+        <div class="cal-cell"><div class="m">8月</div><div class="ev">地域みらい留学 夏の合同説明会対応</div></div>
+        <div class="cal-cell now"><div class="m">9月</div><div class="ev">中学校出張授業／全国募集オンライン相談</div></div>
+        <div class="cal-cell"><div class="m">10月</div><div class="ev">秋の合同説明会／10/23ナイトツアー</div></div>
+        <div class="cal-cell"><div class="m">11月</div><div class="ev">11/7第2回オープンスクール(文化祭2日目)／出願相談会・県外生の生活支援手配</div></div>
+        <div class="cal-cell"><div class="m">12月</div><div class="ev">出願最終確認・面接対策</div></div>
+        <div class="cal-cell"><div class="m">1月</div><div class="ev">推薦入試対応・合格者フォロー</div></div>
+        <div class="cal-cell"><div class="m">2月</div><div class="ev">一般入試対応</div></div>
+        <div class="cal-cell"><div class="m">3月</div><div class="ev">入学予定者説明会／次年度への引き継ぎ</div></div>
+      </div>
+      -->
+
+      <div class="subgroup">
+        <div class="subgroup-h"><span class="dot" style="--dot:var(--navy)"></span>A. 説明会等</div>
+        <div class="catcard" data-t="navy">
+          <ul>
+            <li>10/23(金) ナイトツアー(夜の学校説明会＆校内ツアー)<span class="note"><span class="flag">要確認</span> 「10/13」とのご連絡もありましたが、現在地サマリー・学校サイトの表記に合わせて一旦10/23としています。正しい日付をご確認ください</span></li>
+            <li>11/7(土) 文化祭2日目(一般公開)＝第2回オープンスクール</li>
+            <li>中学校への出張説明会<span class="note">要確認:対象校(高梁中学校?)</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="subgroup">
+        <div class="subgroup-h"><span class="dot" style="--dot:var(--design)"></span>B. 全国募集(地域みらい留学)</div>
+        <div class="catcard" data-t="design">
+          <ul>
+            <li>説明会等の参加者フォロー</li>
+            <li>オンライン説明希望者への対応</li>
+            <li>学校見学希望者への対応</li>
+          </ul>
+        </div>
+        <p class="h2-sub" style="margin:8px 0 0;">地域みらい留学 学校ページ:<a href="https://c-mirai.jp/schools/2787fceb-87d0-46f5-a55a-2818ef7cdf0d" style="color:var(--design);">https://c-mirai.jp/schools/...ef7cdf0d</a></p>
+      </div>
+
+      <div class="subgroup">
+        <div class="subgroup-h"><span class="dot" style="--dot:var(--eco)"></span>C. 生徒数を増やすためのアイデア・施策</div>
+        <div class="catcard" data-t="eco">
+          <ul>
+            <li>JonaLabo アクスタ制作体験会(中学生向け)<span class="note">たたき台。詳細は今後追加</span></li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <h2>4 地域外部連携・視察対応 <span class="tag">イベント参加・出展・視察対応</span></h2>
+    <p class="h2-sub">地域の団体・企業との協働体制、イベント参加・出展、他校・行政等からの視察対応をまとめています。</p>
+    <div class="catgrid">
+      <div class="catcard" data-t="eco">
+        <h3>A. 地域協働体制</h3>
+        <ul>
+          <li>高梁まなびとしごと未来共創コンソーシアム(15団体+8協力先)との関係維持・会議運営</li>
+          <li>高梁市学校魅力化プロジェクトチーム(市役所8部署横断、高梁高校とも共有)との連携窓口</li>
+          <li>新規の地域企業・団体との連携開拓</li>
+        </ul>
+      </div>
+      <div class="catcard" data-t="eco">
+        <h3>B. イベント参加・出展</h3>
+        <ul>
+          <li>商工会議所青年部・信用金庫フォーラム等への生徒参加コーディネート<span class="note">現在地サマリーの視察・出展スケジュール参照(9/12・9/15など)</span></li>
+          <li>出展後のフォロー(お礼・関係維持)<span class="note"><span class="flag">抜け漏れ注意</span> 参加して終わりになりがち</span></li>
+        </ul>
+      </div>
+      <div class="catcard" data-t="eco">
+        <h3>C. 視察対応</h3>
+        <ul>
+          <li>他校・行政・教育委員会等からの視察・見学対応<span class="note">個別の日程・詳細は現在地サマリー「視察対応」区分で一元管理しています</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>2 広報</h2>
+    <p class="h2-sub">学校案内・SNS・メディア対応など、外部への情報発信全般を担当します。</p>
+    <div class="catgrid" style="grid-template-columns:1fr;">
+      <div class="catcard" data-t="eco">
+        <h3>A. ニュースレター(JONAN新聞)の発行</h3>
+        <ul>
+          <li>JONAN新聞(ニュースレター)の発行<span class="note"><span class="flag">たたき台</span> 発行頻度・配布方法・担当は今後整理</span></li>
+        </ul>
+      </div>
+      <div class="catcard" data-t="eco">
+        <h3>B. 発信チェックリスト(抜け漏れ防止)</h3>
+        <p style="font-size:14px;color:var(--ink-muted);margin:-4px 0 12px;"><span class="flag">たたき台</span> 学校行事・生徒募集イベント(説明会等)・外部地域連携について、<b>①公式サイト更新②SNS(Instagram)③チラシ配布・ポスター掲示/中学校への連絡④プレスリリース(県への広報連絡)⑤地域みらい留学サイト掲載</b>の5チャネルで発信できているかを横断チェックします。現状は「？」＝未確認が多いため、分かり次第埋めていきます。</p>
+        <div class="tablewrap">
+        <table class="chk">
+          <tr><th>区分</th><th>行事・イベント</th><th>①サイト</th><th>②SNS</th><th>③チラシ/中学校</th><th>④プレスリリース</th><th>⑤みらい留学サイト</th><th>備考</th></tr>
+          <tr><td class="item">学校行事</td><td class="item">失敗の日2026(10/21)</td><td class="mark ng">未</td><td class="mark chk-na">？</td><td class="mark chk-na">？</td><td class="mark chk-na">？</td><td class="mark chk-na">対象外</td><td class="note">9/3時点でHP未掲載。秩父市視察・岡山県教育委員会来校も同日</td></tr>
+          <tr><td class="item">外部連携</td><td class="item">教育セミナー in 岡山(10/9〜10)</td><td class="mark ng">未</td><td class="mark chk-na">？</td><td class="mark chk-na">？</td><td class="mark chk-na">？</td><td class="mark chk-na">対象外</td><td class="note">9/3時点でHP未掲載。電気科3年チームの発表+物販ブース</td></tr>
+          <tr><td class="item">外部連携</td><td class="item">YEG岡山県青年部大会(9/12)</td><td class="mark chk-na">？</td><td class="mark chk-na">？</td><td class="mark chk-na">？</td><td class="mark chk-na">？</td><td class="mark chk-na">対象外</td><td class="note">JONANホールディングス出展</td></tr>
+          <tr><td class="item">外部連携</td><td class="item">岡山信用金庫フォーラム(9/15)</td><td class="mark chk-na">？</td><td class="mark chk-na">？</td><td class="mark chk-na">？</td><td class="mark chk-na">？</td><td class="mark chk-na">対象外</td><td class="note"></td></tr>
+          <tr><td class="item">募集イベント</td><td class="item">ナイトツアー(10/23)</td><td class="mark ok">済</td><td class="mark chk-na">？</td><td class="mark chk-na">？</td><td class="mark chk-na">対象外?</td><td class="mark ng">未</td><td class="note">学校サイトの地区別説明会ページに掲載あり(詳細な時間・定員は要確認)。地域みらい留学サイトの掲載データは2025年度生徒数のまま更新日不明</td></tr>
+          <tr><td class="item">学校行事/募集</td><td class="item">文化祭2日目＝第2回オープンスクール(11/7)</td><td class="mark chk-na">？</td><td class="mark chk-na">？</td><td class="mark chk-na">？</td><td class="mark chk-na">？</td><td class="mark chk-na">？</td><td class="note">通常のオープンスクールと運営体制が異なる可能性あり</td></tr>
+          <tr><td class="item">外部連携</td><td class="item">おかやま夢育PBLフォーラム(12/25)</td><td class="mark chk-na">？</td><td class="mark chk-na">？</td><td class="mark chk-na">？</td><td class="mark chk-na">？</td><td class="mark chk-na">対象外</td><td class="note"></td></tr>
+        </table>
+        </div>
+        <p style="font-size:13px;color:var(--ink-muted);margin:8px 0 0;">凡例:<span class="mark ok" style="margin:0 4px;">済</span>発信済み /<span class="mark ng" style="margin:0 4px;">未</span>未対応(要対応) /<span class="mark chk-na" style="margin:0 4px;">？</span>未確認。イベントは現在地サマリーと連動。新しい行事が決まったらこの表に追加してください。地域みらい留学サイト(<a href="https://c-mirai.jp/schools/2787fceb-87d0-46f5-a55a-2818ef7cdf0d" style="color:var(--design);">城南高校ページ</a>)は全国募集向けの掲載媒体で、個別の学校行事・外部連携イベントには基本「対象外」。</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>3 総合的な探究の時間 <span class="tag">「Jona Pro」</span></h2>
+    <p class="h2-sub"><span class="flag">たたき台</span> とりあえず2つのタスクに絞って整理しています。詳細な業務内容は今後追加していきます。</p>
+    <div class="event-list">
+      <div class="ev-row no-date">
+        <div class="ev-content">失敗の日の準備・企画・ゲスト調整<span class="sub">詳細は「失敗の日」案件資料を参照</span></div>
+        <div class="ev-status prep">準備中</div>
+      </div>
+      <div class="ev-row no-date">
+        <div class="ev-content">1年生の総合的な探究の時間 内容企画</div>
+        <div class="ev-status draft">たたき台</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>5 県外生・寮生サポート</h2>
+    <p class="h2-sub">全国募集・地域みらい留学で入学した生徒の下宿・寮・生活面のサポートです。募集の「後工程」としてボトルネック化しやすい業務のため、独立したカテゴリーとして管理します。</p>
+    <div class="catgrid">
+      <div class="catcard" data-t="navy">
+        <h3>A. アパート生のサポート・運営</h3>
+        <ul>
+          <li>現状、特段のタスクはありません<span class="note">動きが出たらここに追加してください</span></li>
+        </ul>
+      </div>
+      <div class="catcard" data-t="navy">
+        <h3>B. 寮(寄宿舎)運営、寮生のサポート</h3>
+        <ul>
+          <li>現状、特段のタスクはありません<span class="note">動きが出たらここに追加してください</span></li>
+        </ul>
+      </div>
+      <div class="catcard" data-t="navy">
+        <h3>C. 食事関係</h3>
+        <ul>
+          <li>現状、特段のタスクはありません<span class="note">動きが出たらここに追加してください</span></li>
+        </ul>
+      </div>
+      <div class="catcard" data-t="navy">
+        <h3>D. 休日・放課後の活動支援(地域参加)</h3>
+        <ul>
+          <li>高梁まるごとキャンパス・マナタビ(バスツアー) R8企画(3回)<span class="note">Happy Collaboration合同会社が高梁市から受託運営。R7分3回は完了済み。R8は見積書OK・契約手続き待ち(9/3時点)、行き先・日程調整中。詳細は案件資料参照</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>6 JonaLabo <span class="tag">校内オープンデジタルラボ</span></h2>
+    <p class="h2-sub">校内のオープンデジタルラボ「JonaLabo」という<b>施設</b>そのものの整備・利活用です。3の総合的な探究の時間(そこで行われる活動)とは区別して整理しています。</p>
+    <div class="catgrid">
+      <div class="catcard" data-t="navy">
+        <h3>A. 設備・環境整備</h3>
+        <ul>
+          <li>機材・ソフトウェアの整備・更新<span class="note">要確認:現在の設置機材一覧、老朽化・更新計画</span></li>
+          <li>レイアウト・什器の整備<span class="note">要確認:利用人数に応じたレイアウト方針</span></li>
+          <li>消耗品・備品の管理<span class="note">要確認:管理担当・発注フロー</span></li>
+        </ul>
+      </div>
+      <div class="catcard" data-t="navy">
+        <h3>B. 利活用促進</h3>
+        <ul>
+          <li>授業・部活・生徒個人利用の予約/利用ルール整備<span class="note">要確認:現状の予約方法、稼働率</span></li>
+          <li>教員・生徒への利用促進の周知<span class="note"><span class="flag">抜け漏れ注意</span> 整備しても知られていないと稼働しない</span></li>
+          <li>JonaLaboを使った探究の授業・JONANホールディングス活動の場としての活用<span class="note">利用実態は3・7とも連動</span></li>
+        </ul>
+      </div>
+      <div class="catcard" data-t="navy">
+        <h3>C. 外部連携・貸し出し</h3>
+        <ul>
+          <li>地域・外部団体への開放や共同利用の可能性<span class="note">要確認:貸し出し方針の有無</span></li>
+        </ul>
+      </div>
+    </div>
+    <p class="h2-sub" style="margin-top:6px;"><span class="flag">要確認</span> このセクションは施設の存在は判明したが具体的な整備状況・利用ルールは未確認のたたき台です。実際の状況を教えていただければ更新します。</p>
+  </section>
+
+  <section>
+    <h2>7 JONANホールディングス株式会社</h2>
+    <p class="h2-sub">生徒経営会社の運営サポートです。業績・財務・部署別タスクの詳細は専用ダッシュボードを参照。</p>
+    <div class="catgrid" style="grid-template-columns:1fr;">
+      <div class="catcard" data-t="navy">
+        <ul>
+          <li>JONANホールディングス株式会社(生徒経営会社)の運営サポート<span class="note">決算税務申告:2026-09-30／株主総会:2026年10月中</span></li>
+          <li>経常利益355,574円(黒字、2026-06-22時点)<span class="note">売上高140,240円が初めて計上。ただし本業の営業損益は▲72,569円で赤字。黒字の主因は寄付金収入。詳細は下記リンク参照</span></li>
+          <li>生徒主体プロジェクトの事務局的サポート、教職員との情報共有・調整</li>
+        </ul>
+        <p class="h2-sub" style="margin:10px 0 0;">JONANホールディングス専用ダッシュボード(Artifact):<br><a href="https://claude.ai/code/artifact/30531482-5117-4841-819d-b4716e76189e" style="color:var(--design);">「JONANホールディングス 業績＆活動ダッシュボード」はこちら →</a></p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>8 新たな魅力づくり</h2>
+    <p class="h2-sub">魅力化の効果検証、新規連携の開拓など、既存業務の延長線ではなく新しく育てていく取り組みです。広報の定常業務は2 広報に整理しています。</p>
+    <div class="catgrid">
+      <div class="catcard" data-t="eco">
+        <h3>A. 評価・効果検証</h3>
+        <ul>
+          <li>高校魅力化の評価指標・効果検証への対応</li>
+        </ul>
+      </div>
+      <div class="catcard" data-t="eco">
+        <h3>B. 新規連携の開拓</h3>
+        <ul>
+          <li>森の芸術祭2027、旅するひとまちフォーラム等、市内イベントとの連携可能性</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>9 その他</h2>
+    <p class="h2-sub">上記8カテゴリーに分類しづらい業務のためのカテゴリーです。<span class="flag">たたき台</span> 現時点で該当する業務はありません。</p>
+    <div class="catgrid" style="grid-template-columns:1fr;">
+      <div class="catcard">
+        <ul>
+          <li>現在、該当する業務はありません<span class="note">他の8カテゴリーに当てはまらない業務が発生したら、ここに追加してください</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="callout">
+    <h2>抜け漏れが起きやすいポイント <span class="tag">要チェック</span></h2>
+    <ol>
+      <li><b>中学校訪問後のフォロー</b>が抜けがち<span class="note">訪問して終わりにせず、お礼連絡や次回訪問の約束まで一続きで管理する(1)</span></li>
+      <li><b>県外入学者の下宿・生活支援</b>は全国募集の「後工程」<span class="note">募集がうまくいっても、ここで止まると入学後の満足度・口コミに影響する(1→5)</span></li>
+      <li><b>探究発表イベントを広報の機会として事前に告知</b>できているか<span class="note">「失敗の日」のような発信力のあるイベントほど、開催告知が社内向けで終わりやすい(3→2)</span></li>
+      <li><b>SNS更新の継続性</b><span class="note">担当者の異動・多忙で更新が止まりやすいため、複数名で運用ルールを共有する(2)</span></li>
+      <li><b>出願・個別相談の対応記録</b><span class="note">誰が誰に何を伝えたかが残っていないと、同じ質問への回答がぶれる(1)</span></li>
+    </ol>
+  </section>
+
+  <footer>
+    このページは会話の中で横山弘毅が手動で作成・更新しているスナップショットです。視察・出展スケジュールは9/2時点で確認できている内容、未対応案件・HP/SNS更新状況は情報提供待ちです。状況が変わったら横山にお伝えいただければこのページを更新します。業務ダッシュボード部分(1〜9)は既存資料と一般的な高校魅力化コーディネーター業務の知見をもとにしたたたき台のため、実際の校内体制・分担と異なる場合は先生方・関係者との共有時にあわせて確認してください。「6 JonaLabo」は校内オープンデジタルラボ(施設)の整備・利活用、「3 総合的な探究の時間」は「Jona Pro」探究学習の授業・イベント運営として区別しています。「2 広報」は旧「新たな魅力づくり」から独立させた発信業務全般、「5 県外生・寮生サポート」は旧「地域外部連携」から独立させた生徒の生活支援業務全般です。視察対応は「4 地域外部連携・視察対応」の一部として位置づけつつ、個別の日程は引き続き現在地サマリーで一元管理しています。設備・利用ルールの詳細はまだ未確認のため、実態が分かり次第更新します。セクションの並び順は、タイル一覧(1〜9)の番号順ではなく優先度順(現在地サマリー→1→4→2→3→5→6→7→8→9)にしています。
+  </footer>
+
+</div>
+</body>
+</html>
